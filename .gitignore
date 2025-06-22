@@ -1,0 +1,6 @@
+.idea/
+__pycache__/
+venv/
+appliciton/__pycache__
+notes.txt
+migrations/
