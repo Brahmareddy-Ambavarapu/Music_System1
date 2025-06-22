@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+        </li>
+    </ul>
+    <form class="d-flex mx-auto" action="/search-results" method="GET">
+        <input class="form-control me-2 text-center" type="search" name="query" placeholder="Search Songs/Playlists/Albums" aria-label="Search" style="width: 550px;">
+        <button class="btn btn-success" type="submit">Search</button>
+    </form>
+    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+            <a class="nav-link {% if request.path == '/creator-home' %} active {% endif %}" href="/creator-account">Creator Mode</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.path == '/profile' %} active {% endif %}" href="/profile">Profile</a>
+        </li>
+        <li class="nav-item">
+            <a href="/logout" style="color: white; text-decoration: none; margin-left: 10px;"><button class="btn btn-danger btn-block">Logout</button></a>
+        </li>
+    </ul>
+</div>
+
+{% endblock navbar %}
+
+
+{% block content %}
+
+{% if message %}
+<div class="container-sm" style="width: 850px;">
+    <div class="alert alert-success" role="alert">
+        {{ message }}
+    </div>
+</div>
+{% endif %}
+
+<div class="container-sm border border-dark" style="margin-top: 50px; margin-bottom: 50px; padding:30px; border-radius: 10px; width: 900px;">
+    <h1 class="text-center">Profile</h1>    
+
+    <div style="display: flex; justify-content: center;">
+        <form method="POST">
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label for="type"><strong>Username</strong></label>
+                <input class="form-control" type="text" value="{{ profile_details.username }}" style="width: 800px;" aria-label="Disabled input example" disabled readonly>
+            </div>
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label for="name"><strong>Name</strong></label>
+                <input type="text" class="form-control" id="title" name="name" value="{% if profile_details.name == None %}{% else %}{{ profile_details.name }}{% endif %}" style="width: 800px;" palceholder="Enter Name">
+            </div>
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label for="email"><strong>Email</strong></label>
+                <input class="form-control" type="email" name="email" value="{% if profile_details.email == None %}{% else %}{{ profile_details.email }}{% endif %}"  style="width: 800px;" palceholder="Enter Email">
+            </div>
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label for="type"><strong>Account Type</strong></label>
+                <input class="form-control" type="text" value="{{ profile_details.type.title() }}" style="width: 800px;" aria-label="Disabled input example" disabled readonly>
+            </div>
+            <br>
+            <div style="text-align: center;">
+                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Function to redirect after a 3 sec delay
+    function redirectToAnotherPage() {
+        var message = "{{ message }}"
+        if (message) {
+            setTimeout(function() {
+            window.location.href = "/user-home";
+        }, 3000);
+        }
+    }
+    window.onload = redirectToAnotherPage;
+    </script>
+
+
+{% endblock content %}

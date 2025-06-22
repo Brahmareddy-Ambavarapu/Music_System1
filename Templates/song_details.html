@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+        </li>
+    </ul>
+    <form class="d-flex mx-auto" action="/search-results" method="GET">
+        <input class="form-control me-2 text-center" type="search" name="query" placeholder="Search Songs/Playlists/Albums" aria-label="Search" style="width: 550px;">
+        <button class="btn btn-success" type="submit">Search</button>
+    </form>
+    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+            <a class="nav-link {% if request.path == '/creator-home' %} active {% endif %}" href="/creator-account">Creator Mode</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.path == '/profile' %} active {% endif %}" href="/profile">Profile</a>
+        </li>
+        <li class="nav-item">
+            <a href="/logout" style="color: white; text-decoration: none; margin-left: 10px;"><button class="btn btn-danger btn-block">Logout</button></a>
+        </li>
+    </ul>
+</div>
+
+{% endblock navbar %}
+
+
+{% block content %}
+
+<div class="container mt-5" style="width: 800px;">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">   
+                <div class="col-8">
+                <h1 class="card-title">{{ song.name }}</h1>
+                <h3 class="card-text">{{ song.artist }} ({{ song.release_date[:4] }})</h3>
+                <h5 class="card-text">{{ song_rating }} out of 5</h5>
+                {% if song_album %}
+                    <a href="/user-album-details/{{ song_album.id }}"><h5>Album : {{ song_album.name }}</h5></a>
+                {% endif %}
+                </div>
+                <div class="col-4" style="text-align: right;">
+                    <img src="/{{ song.image }}" style="width: 150px; height:150px; border-radius: 8px; margin-top: 1px;">
+                </div>
+            </div>  
+            <br>
+            <form method="POST" action="/song-like/{{ song.id }}">
+                <input type="hidden" name="song_liked" value="{{ song_liked }}">
+                {% if song_liked %}
+                    <button type="submit" class="btn btn-success">Unlike Song</button>
+                {% else %}
+                    <button type="submit" class="btn btn-outline-success">Like Song</button>
+                {% endif %}
+            </form>
+            <br>
+            <!-- Button to trigger the modal -->
+            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#addToPlaylistModal">
+                Add to Playlist
+            </button>
+            
+            <!-- Modal for adding to playlist -->
+            <div class="modal fade" tabindex="-1" id="addToPlaylistModal" aria-labelledby="addToPlaylistModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="addToPlaylistModalLabel">Add to Playlist</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    <!-- Form inside the modal for adding to playlist -->
+                    <form method="POST" action="/song-playlist">
+                        <!-- Replace with actual song ID -->
+                        <input type="hidden" name="song_id" value="{{ song.id }}">
+                        
+                        <!-- Playlist dropdown menu -->
+                        <label for="playlist">Select Playlist:</label>
+                        <select id="playlist" name="playlist" class="form-select" required>
+                            <!-- Replace the options with actual playlist names dynamically -->
+                            {% for playlist in all_playlists %}
+                                <option value="{{ playlist.id }}">{{ playlist.name }}</option>
+                            {% endfor %}
+                            <!-- Add more options as needed -->
+                        </select>
+                        
+                        <!-- Submit button with right alignment -->
+                        <div class="d-flex justify-content-end mt-3">
+                            <button type="submit" class="btn btn-primary">Add to Playlist</button>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <!-- Button to trigger the modal -->
+            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Rate This Song
+            </button>
+            
+            <!-- Modal -->
+            <div class="modal fade" tabindex="-1" id="exampleModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Rate This Song</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    <!-- Form inside the modal -->
+                    <form method="POST" action="/song-rating">
+                        <!-- Replace with actual song ID -->
+                        <input type="hidden" name="song_id" value="{{ song.id }}">
+                        
+                        <!-- Rating input -->
+                        <label for="rating">Rate the song:</label>
+                        <input type="number" id="rating" name="rating" min="1" max="5" value="{{ song_rating|int }}" required>
+                        <!-- Submit button -->
+                        <button type="submit" class="btn btn-primary">Submit Rating</button>
+                    </form>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <br>
+            <br>
+            <h3 class="card-subtitle mb-2 text-muted">Lyrics</h3>
+            <div class="container">
+                <p class="card-text">
+                    {{ song.lyrics }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

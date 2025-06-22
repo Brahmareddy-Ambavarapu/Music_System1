@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+        </li>
+    </ul>
+    <form class="d-flex mx-auto" action="/search-results" method="GET">
+        <input class="form-control me-2 text-center" type="search" name="query" placeholder="Search Songs/Playlists/Albums" aria-label="Search" style="width: 550px;">
+        <button class="btn btn-success" type="submit">Search</button>
+    </form>
+    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+            <a class="nav-link {% if request.path == '/creator-home' %} active {% endif %}" href="/creator-account">Creator Mode</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.path == '/profile' %} active {% endif %}" href="/profile">Profile</a>
+        </li>
+        <li class="nav-item">
+            <a href="/logout" style="color: white; text-decoration: none; margin-left: 10px;"><button class="btn btn-danger btn-block">Logout</button></a>
+        </li>
+    </ul>
+</div>
+
+{% endblock navbar %}
+
+
+{% block content %}
+
+{% if username %}
+    <h2 class="text-center">Welcome {{ username }}</h2>
+{% endif %}
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center" style="padding-right:10px;">
+        <h2 class="text-start">Recommended Tracks</h2>
+        <a href="/recommended-tracks" class="btn btn-secondary">See More</a>
+    </div>
+
+    <div class="d-flex flex-nowrap overflow-auto">
+        {% for song in recommended_tracks %}
+            <div class="col ms-2 mt-3">
+                <div class="card" style="width: 14rem; margin-bottom: 10px;">
+                    <img class="card-img-top" src="{{ song.image }}" alt="Song Image" style="height:250px;">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ song.name }}</h5>
+                        <a href="/song-details/{{ song.id }}" class="btn btn-primary">Read Lyrics</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+<br>
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2 class="text-start">Your Playlists</h2>
+        <a href="/playlist-create" class="btn btn-secondary">Create New Playlist</a>
+    </div>
+    <div class="d-flex flex-nowrap overflow-auto">
+        {% for playlist in user_playlists %}
+        <div class="card col-3 ms-2 mt-3" style="min-width: 14rem; max-width: 14rem;">
+            <img class="card-img-top" src="/static/images/songs/0.jpg" alt="Card image cap">
+            <div class="card-body text-center">
+                <h5 class="card-title">{{ playlist.name }}</h5>
+                <a href="playlist-details/{{ playlist.id }}" class="btn btn-primary">View Tracks</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<br>
+
+{% if featured_album %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2 class="text-start">{{ featured_album.name }}</h2>
+        <a href="/user-album-details/{{ featured_album_id }}" class="btn btn-secondary">See More</a>
+    </div>
+    <div class="d-flex flex-nowrap overflow-auto">
+        {% for song in featured_album_songs %}
+        <div class="card col-3 ms-2 mt-3" style="min-width: 14rem; max-width: 14rem;">
+            <img class="card-img-top" src="/{{song.image}}" alt="Card image cap">
+            <div class="card-body text-center">
+                <h5 class="card-title">{{ song.name }}</h5>
+                <a href="song-details/{{ song.id }}" class="btn btn-primary">View Lyrics</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<br>
+<br>
+{% endblock content %}
