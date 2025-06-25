@@ -8,7 +8,7 @@ The application is a multi-user music platform. Users can play music, read lyric
 Creators contribute by adding new songs, albums, and lyrics, with albums containing multiple songs, and the system showcases the latest or highly-rated content.
 Admin has functionality to flag or delete songs and albums.
 
-Project Live Deployed Link : https://modify.adhirajpandey.me/
+
 
 ## Technologies Used
 
@@ -36,11 +36,7 @@ The features of the application are as follows:
 - Playlist management: To create, edit and delete playlists
 - Music analytics: To help creator analyse his/her content performance
 
-## Demonstration
 
-- Youtube Demo Link: https://www.youtube.com/watch?v=OBMKyEXCnwo
-- Index Page Screenshot:
 
-    ![modify_index](https://github.com/adhirajpandey/Modify/assets/87516052/822cab27-7aa2-4292-b3b2-e0e8b7f9ab66)
 
   
